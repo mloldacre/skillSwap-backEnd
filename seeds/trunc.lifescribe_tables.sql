@@ -1,0 +1,5 @@
+TRUNCATE
+lifescribe_scribbles,
+lifescribe_scribes,
+lifescribe_users
+RESTART IDENTITY CASCADE;
