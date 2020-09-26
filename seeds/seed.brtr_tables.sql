@@ -25,13 +25,13 @@ VALUES
     '$2a$11$yEBMQ89kNQlIDxDJRBqdSujvO2/OUJOdwV//Z9HksGypYYbAPLPFC',
     'TwoT@email.com',
     1112
-  ),
+  );
   
   
   INSERT INTO brtr_service
    (user_id, service_offered, service_seeking, date_created)
   VALUES
   (1, 'Lawn mowing', 'Hair styling', now() - '1 days'::INTERVAL),
-  (2, 'Hair styling','Lawn mowing', now() - '2 days'::INTERVAL),
+  (2, 'Hair styling','Lawn mowing', now() - '2 days'::INTERVAL);
    
   COMMIT;
