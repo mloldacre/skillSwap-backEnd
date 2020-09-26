@@ -1,4 +1,4 @@
-CREATE TABLE lifescribe_users (
+CREATE TABLE brtr_users (
   id SERIAL PRIMARY KEY,
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
@@ -6,5 +6,5 @@ CREATE TABLE lifescribe_users (
   PASSWORD TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
   date_created TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  date_modified TIMESTAMPTZ
+  zip_code INTEGER NOT NULL
 );
