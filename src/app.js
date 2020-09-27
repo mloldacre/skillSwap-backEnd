@@ -4,8 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
-const scribeRouter = require('./scribes/scribes-router');
-const scribbleRouter = require('./scribbles/scribbles-router');
+const serviceRouter = require('./services/service-router');
 const authRouter = require('./auth/auth-router');
 const usersRouter = require('./users/users-router');
 
@@ -19,8 +18,7 @@ app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
 
-app.use('/api/scribes', scribeRouter);
-app.use('/api/scribbles', scribbleRouter);
+app.use('/api/services', serviceRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 
