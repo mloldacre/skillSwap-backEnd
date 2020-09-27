@@ -50,6 +50,7 @@ const SKillSkill = {
       id: skill.id,
       skill_offered: xss(skill.skill_offered),
       skill_seeking: xss(skill.skill_seeking),
+      skill_desc: xss(skill.skill_desc),
       date_created: skill.date_created,
       user_id: skill.user_id
     };

@@ -1,7 +1,6 @@
 /* eslint-disable eqeqeq */
 const express = require('express');
 const AuthService = require('./auth-service');
-const ServiceService = require('../skills/skill-service');
 const path = require('path');
 
 const authRouter = express.Router();

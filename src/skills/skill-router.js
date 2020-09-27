@@ -1,65 +1,65 @@
 const path = require('path');
 const express = require('express');
-const ServiceService = require('./skill-service');
+const SkillService = require('./skill-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 
-const serviceRouter = express.Router();
+const skillRouter = express.Router();
 const jsonBodyParser = express.json();
 
 
-serviceRouter
+skillRouter
   .route('/')
   .get((req, res, next) => {
-    ServiceService.getAllServices(req.app.get('db'))
-      .then(services => {
-        res.json(ServiceService.serializeServices(services));
+    SkillService.getAllSkills(req.app.get('db'))
+      .then(skills => {
+        res.json(SkillService.serializeSkills(skills));
       })
       .catch(next);
   })
   .post(jsonBodyParser, (req, res, next) => {
-    const { service_offered, service_seeking, user_id } = req.body;
-    const newService = { service_offered, service_seeking, user_id };
+    const { skill_offered, skill_seeking, skill_desc ,user_id } = req.body;
+    const newSkill = { skill_offered, skill_seeking, skill_desc ,user_id };
 
-    for (const [key, value] of Object.entries(newService))
+    for (const [key, value] of Object.entries(newSkill))
       // eslint-disable-next-line eqeqeq
       if (value == null)
         return res.status(400).json({
           error: { message: `Missing '${key}' in request body` }
         });
 
-    ServiceService.insertService(req.app.get('db'), newService)
-      .then(service => {
+    SkillService.insertSkill(req.app.get('db'), newSkill)
+      .then(skill => {
         res.status(201)
-          .location(path.posix.join(req.originalUrl, `/${service.id}`))
-          .json(ServiceService.serializeService(service));
+          .location(path.posix.join(req.originalUrl, `/${skill.id}`))
+          .json(SkillService.serializeSkill(skill));
       })
       .catch(next);
   });
 
-serviceRouter
+skillRouter
   .route('/:id')
   //.all(requireAuth)
   .all((req, res, next) => {
-    ServiceService.getById(
+    SkillService.getById(
       req.app.get('db'),
       req.params.id
     )
-      .then(service => {
-        if (!service) {
+      .then(skill => {
+        if (!skill) {
           return res.status(404).json({
-            error: { message: 'Service doesn\'t exist' }
+            error: { message: 'Skill doesn\'t exist' }
           });
         }
-        res.service = service;
+        res.skill = skill;
         next();
       })
       .catch(next);
   })
   .get((req, res) => {
-    res.json(ServiceService.serializeService(res.service));
+    res.json(SkillService.serializeSkill(res.skill));
   })
   .delete((req, res, next) => {
-    ServiceService.deleteService(
+    SkillService.deleteSkill(
       req.app.get('db'),
       req.params.id
     )
@@ -69,10 +69,10 @@ serviceRouter
       .catch(next);
   })
   .patch(jsonBodyParser, (req, res, next) => {
-    const { service_offered, service_seeking } = req.body;
-    const serviceToUpdate = { service_offered, service_seeking };
+    const { skill_offered, skill_seeking, skill_desc } = req.body;
+    const skillToUpdate = { skill_offered, skill_seeking, skill_desc };
 
-    const numberOfValues = Object.values(serviceToUpdate).filter(Boolean).length;
+    const numberOfValues = Object.values(skillToUpdate).filter(Boolean).length;
     if (numberOfValues === 0) {
       return res.status(400).json({
         error: {
@@ -81,10 +81,10 @@ serviceRouter
       });
     }
 
-    ServiceService.updateService(
+    SkillService.updateSkill(
       req.app.get('db'),
       req.params.id,
-      serviceToUpdate
+      skillToUpdate
     )
       .then(numRowsAffected => {
         res.status(204).end();
@@ -92,4 +92,4 @@ serviceRouter
       .catch(next);
   });
 
-module.exports = serviceRouter;
+module.exports = skillRouter;
