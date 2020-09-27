@@ -9,11 +9,12 @@ const SKillSkill = {
     return knex.select('*').from('brtr_skill')
       .where('user_id', userId);
   },
-  
-  getSkillsWithinRange(knex, zipcode){
-    return knex.select('*').from('brtr_skill').join('btrt_users', 'user_id', '=', 'id');
+
+  getSkillsWithinRange(knex, zipcode) {
+    return this.getAllSkills(knex)
+      .whereBetween('skill_zip', [zipcode - 2, zipcode + 2]);
   },
-  
+
 
   insertSkill(knex, newSkill) {
     return knex

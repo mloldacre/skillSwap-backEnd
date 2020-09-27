@@ -37,6 +37,17 @@ skillRouter
   });
 
 skillRouter
+  .route('/close')
+  .all(requireAuth)
+  .get((req, res, next) => {
+    SkillService.getSkillsWithinRange(req.app.get('db'), req.user.zip_code)
+      .then(skills => {
+        res.json(SkillService.serializeSkills(skills));
+      })
+      .catch(next);
+  });
+
+skillRouter
   .route('/:id')
   //.all(requireAuth)
   .all((req, res, next) => {
