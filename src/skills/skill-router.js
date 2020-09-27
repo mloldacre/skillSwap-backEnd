@@ -17,8 +17,8 @@ skillRouter
       .catch(next);
   })
   .post(jsonBodyParser, (req, res, next) => {
-    const { skill_offered, skill_seeking, skill_desc ,user_id } = req.body;
-    const newSkill = { skill_offered, skill_seeking, skill_desc ,user_id };
+    const { skill_offered, skill_seeking, skill_desc, user_id, skill_zip } = req.body;
+    const newSkill = { skill_offered, skill_seeking, skill_desc, user_id, skill_zip };
 
     for (const [key, value] of Object.entries(newSkill))
       // eslint-disable-next-line eqeqeq

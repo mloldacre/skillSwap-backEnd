@@ -9,6 +9,11 @@ const SKillSkill = {
     return knex.select('*').from('brtr_skill')
       .where('user_id', userId);
   },
+  
+  getSkillsWithinRange(knex, zipcode){
+    return knex.select('*').from('brtr_skill').join('btrt_users', 'user_id', '=', 'id');
+  },
+  
 
   insertSkill(knex, newSkill) {
     return knex
@@ -51,6 +56,7 @@ const SKillSkill = {
       skill_offered: xss(skill.skill_offered),
       skill_seeking: xss(skill.skill_seeking),
       skill_desc: xss(skill.skill_desc),
+      skill_zip: xss(skill.skill_zip),
       date_created: skill.date_created,
       user_id: skill.user_id
     };
