@@ -1,1 +1,0 @@
-DROP TABLE IF EXISTS brtr_service CASCADE;

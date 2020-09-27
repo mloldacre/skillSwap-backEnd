@@ -1,7 +1,8 @@
-CREATE TABLE brtr_service (
+CREATE TABLE brtr_skill (
   id SERIAL PRIMARY KEY,
-  service_offered TEXT NOT NULL,
-  service_seeking TEXT NOT NULL,
+  skill_offered TEXT NOT NULL,
+  skill_seeking TEXT NOT NULL,
+  skill_desc TEXT NOT NULL,
   date_created DATE DEFAULT NOW() NOT NULL,
   user_id INTEGER REFERENCES brtr_users(id) ON DELETE CASCADE NOT NULL
 )

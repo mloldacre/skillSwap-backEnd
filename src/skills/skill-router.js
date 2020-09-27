@@ -1,6 +1,6 @@
 const path = require('path');
 const express = require('express');
-const ServiceService = require('./service-service');
+const ServiceService = require('./skill-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 
 const serviceRouter = express.Router();
