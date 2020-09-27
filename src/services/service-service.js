@@ -1,19 +1,19 @@
 const xss = require('xss');
 
 const ServiceService = {
-  getAllservices(knex) {
-    return knex.select('*').from('brtr_services');
+  getAllServices(knex) {
+    return knex.select('*').from('brtr_service');
   },
 
-  getservicesForScribe(knex, scribeId) {
-    return knex.select('*').from('brtr_services')
+  getServicesForScribe(knex, scribeId) {
+    return knex.select('*').from('brtr_service')
       .where('scribe_id', scribeId);
   },
 
   insertService(knex, newService) {
     return knex
       .insert(newService)
-      .into('brtr_services')
+      .into('brtr_service')
       .returning('*')
       .then(rows => {
         return rows[0];
@@ -22,20 +22,20 @@ const ServiceService = {
 
   getById(knex, id) {
     return knex
-      .from('brtr_services')
+      .from('brtr_service')
       .select('*')
       .where('id', id)
       .first();
   },
 
   deleteService(knex, id) {
-    return knex('brtr_services')
+    return knex('brtr_service')
       .where({ id })
       .delete();
   },
 
   updateService(knex, id, newServiceFields) {
-    return knex('brtr_services')
+    return knex('brtr_service')
       .where({ id })
       .update(newServiceFields);
   },
@@ -50,7 +50,7 @@ const ServiceService = {
       id: service.id,
       service_offered: xss(service.service_offered),
       service_seeking: xss(service.service_seeking),
-      date_created: service.dated_created,
+      date_created: service.date_created,
       user_id: service.user_id
     };
   }

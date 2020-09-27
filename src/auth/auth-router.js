@@ -36,19 +36,6 @@ authRouter
             const sub = dbUser.user_name;
             const payload = { user_id: dbUser.id };
             
-            // ScribeService.getByDate(req.app.get('db'), dbUser.id)
-            //   .then(scribe => {
-            //     if (!scribe) {
-            //       const newScribe = { user_id: dbUser.id };
-            //       ScribeService.insertScribe(req.app.get('db'), newScribe)
-            //         .then(scribe => {
-            //           res.status(201)
-            //             .location(path.posix.join(req.originalUrl, `/${scribe.id}`))
-            //             .json(ScribeService.serializeScribe(scribe));
-            //         })
-            //         .catch(next);
-            //     }
-            //   });
             res.send({
               authToken: AuthService.createJwt(sub, payload),
             });

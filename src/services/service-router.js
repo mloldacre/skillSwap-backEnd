@@ -11,14 +11,14 @@ serviceRouter
   .route('/')
   .get((req, res, next) => {
     ServiceService.getAllServices(req.app.get('db'))
-      .then(Services => {
-        res.json(ServiceService.serializeServices(Services));
+      .then(services => {
+        res.json(ServiceService.serializeServices(services));
       })
       .catch(next);
   })
   .post(jsonBodyParser, (req, res, next) => {
-    const { Service_type, Service_content, scribe_id, user_id } = req.body;
-    const newService = { Service_type, Service_content, scribe_id, user_id };
+    const { service_offered, service_seeking, user_id } = req.body;
+    const newService = { service_offered, service_seeking, user_id };
 
     for (const [key, value] of Object.entries(newService))
       // eslint-disable-next-line eqeqeq
@@ -28,62 +28,40 @@ serviceRouter
         });
 
     ServiceService.insertService(req.app.get('db'), newService)
-      .then(Service => {
+      .then(service => {
         res.status(201)
-          .location(path.posix.join(req.originalUrl, `/${Service.id}`))
-          .json(ServiceService.serializeService(Service));
+          .location(path.posix.join(req.originalUrl, `/${service.id}`))
+          .json(ServiceService.serializeService(service));
       })
       .catch(next);
   });
 
 serviceRouter
-  .route('/for_scribe/:scribe_id')
-  .all(requireAuth)
-  .all((req, res, next) => {
-    ServiceService.getServicesForScribe(
-      req.app.get('db'),
-      req.params.scribe_id)
-      .then(Services => {
-        if (!Services) {
-          return res.status(404).json({
-            error: { message: 'Services don\'t exist' }
-          });
-        }
-        res.Services = Services;
-        next();
-      })
-      .catch(next);
-  })
-  .get((req, res) => {
-    res.json(res.Services.map(Service => ServiceService.serializeService(Service)));
-  });
-
-serviceRouter
-  .route('/:Service_id')
-  .all(requireAuth)
+  .route('/:id')
+  //.all(requireAuth)
   .all((req, res, next) => {
     ServiceService.getById(
       req.app.get('db'),
-      req.params.Service_id
+      req.params.id
     )
-      .then(Service => {
-        if (!Service) {
+      .then(service => {
+        if (!service) {
           return res.status(404).json({
             error: { message: 'Service doesn\'t exist' }
           });
         }
-        res.Service = Service;
+        res.service = service;
         next();
       })
       .catch(next);
   })
   .get((req, res) => {
-    res.json(ServiceService.serializeService(res.Service));
+    res.json(ServiceService.serializeService(res.service));
   })
   .delete((req, res, next) => {
     ServiceService.deleteService(
       req.app.get('db'),
-      req.params.Service_id
+      req.params.id
     )
       .then(() => {
         res.status(204).end();
@@ -91,10 +69,10 @@ serviceRouter
       .catch(next);
   })
   .patch(jsonBodyParser, (req, res, next) => {
-    const { Service_content } = req.body;
-    const ServiceToUpdate = { Service_content };
+    const { service_offered, service_seeking } = req.body;
+    const serviceToUpdate = { service_offered, service_seeking };
 
-    const numberOfValues = Object.values(ServiceToUpdate).filter(Boolean).length;
+    const numberOfValues = Object.values(serviceToUpdate).filter(Boolean).length;
     if (numberOfValues === 0) {
       return res.status(400).json({
         error: {
@@ -103,12 +81,10 @@ serviceRouter
       });
     }
 
-    ServiceToUpdate.time_created = new Date();
-
     ServiceService.updateService(
       req.app.get('db'),
-      req.params.Service_id,
-      ServiceToUpdate
+      req.params.id,
+      serviceToUpdate
     )
       .then(numRowsAffected => {
         res.status(204).end();
